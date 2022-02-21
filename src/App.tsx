@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import { useDropzone } from 'react-dropzone'
+import { FileRejection, useDropzone } from 'react-dropzone'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import uploadToIPFS from './upload'
 import toast from 'react-hot-toast'
@@ -10,10 +10,15 @@ function App() {
     useState<{ hash: string; url: string; name: string; size: string }>()
 
   const upload = async (file: File) => {
-    const data = await uploadToIPFS(file)
-    setUploading(false)
-    setIpfsData(data)
-    toast.success('File uploaded 🎉')
+    try {
+      const data = await uploadToIPFS(file)
+      setUploading(false)
+      setIpfsData(data)
+      toast.success('File uploaded 🎉')
+    } catch (error) {
+      toast.error('Something went wrong')
+      setUploading(false) // if upload fails, set uploading state to false
+    }
   }
 
   const onDrop = useCallback((file) => {
@@ -21,10 +26,16 @@ function App() {
     upload(file[0])
   }, [])
 
+  const onDropRejected = (fileRejections: FileRejection[]) => {
+    fileRejections[0].errors.forEach((error) => toast.error(error.message)) // show all returned error messages
+  }
+
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
+    onDropRejected,
     accept: '.png,.jpg,.jpeg,.gif',
-    maxFiles: 1
+    maxFiles: 1,
+    maxSize: 100000000  // 100 MB
   })
 
   return (
