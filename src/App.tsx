@@ -60,14 +60,14 @@ function App() {
       {ipfsData ? (
         <div className="mt-16 bg-gray-800 rounded-lg">
           <div className="flex items-center justify-between mb-4">
-            <span className="select-all">{ipfsData.hash}</span>
+            <span className="select-all overflow-hidden truncate">{ipfsData.hash}</span>
             <CopyToClipboard
               text={ipfsData.hash}
               onCopy={() => toast.success('Hash copied 🎉')}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="w-5 h-5 cursor-copy opacity-60 hover:opacity-100"
+                className="w-5 h-5 flex-none cursor-copy opacity-60 hover:opacity-100"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -84,7 +84,7 @@ function App() {
           <div className="flex items-center justify-between mb-10 overflow-hidden truncate">
             <a
               target="_blank"
-              className="hover:text-blue-400"
+              className="hover:text-blue-400 overflow-hidden truncate"
               href={ipfsData.url}
             >
               {ipfsData.url}
@@ -95,7 +95,7 @@ function App() {
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="w-5 h-5 cursor-copy opacity-60 hover:opacity-100"
+                className="w-5 h-5 flex-none cursor-copy opacity-60 hover:opacity-100"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
