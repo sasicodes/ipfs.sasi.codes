@@ -6,7 +6,7 @@ import App from './App'
 
 ReactDOM.render(
   <React.StrictMode>
-    <div className="w-full max-w-2xl py-10 mx-auto">
+    <div className="w-full max-w-2xl p-4 md:px-0 md:py-10 mx-auto">
       <Toaster position='top-right' />
       <App />
     </div>
