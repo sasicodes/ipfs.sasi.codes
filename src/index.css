@@ -5,5 +5,5 @@
 @tailwind utilities;
 
 body {
-  @apply !mr-0 font-sans min-h-screen bg-gray-800 overflow-x-hidden text-gray-200;
+  @apply font-sans min-h-screen bg-gray-800 overflow-x-hidden text-gray-200;
 }
