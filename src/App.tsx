@@ -33,7 +33,7 @@ function App() {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     onDropRejected,
-    accept: '.png,.jpg,.jpeg,.gif',
+    accept: '.png,.jpg,.jpeg,.gif,.webp',
     maxFiles: 1,
     maxSize: 100000000 // 100 MB
   })
