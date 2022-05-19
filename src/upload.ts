@@ -12,7 +12,8 @@ const uploadToIPFS = async (data: File) => {
     url: `https://ipfs.infura.io/ipfs/${Hash}`,
     hash: Hash,
     name: Name,
-    size:Size
+    size: Size,
+    type: data.type
   }
 }
 
