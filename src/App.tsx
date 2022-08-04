@@ -6,10 +6,12 @@ import { getFileType } from './utils'
 import GatewayIcon from './icons/GatewayIcon'
 import GithubIcon from './icons/GithubIcon'
 import CopyIcon from './icons/CopyIcon'
-import uploadToIPFS from './upload'
+import { uploadDataToIPFS, uploadToIPFS } from './upload'
 
 function App() {
   const [uploading, setUploading] = useState(false)
+  const [uploadJson, setUploadJson] = useState(false)
+  const [jsonString, setJsonString] = useState('')
   const [ipfsData, setIpfsData] = useState<{
     hash: string
     url: string
@@ -45,6 +47,19 @@ function App() {
     maxSize: 100000000 // 100 MB
   })
 
+  const uploadData = async () => {
+    setUploading(true)
+    try {
+      const data = await uploadDataToIPFS(jsonString)
+      setUploading(false)
+      setIpfsData(data)
+      toast.success('Data uploaded 🎉')
+      setJsonString('')
+    } catch (error) {
+      setUploading(false) // if upload fails, set uploading state to false
+    }
+  }
+
   return (
     <div>
       <div className="flex items-center justify-between">
@@ -75,19 +90,46 @@ function App() {
           </a>
         </div>
       </div>
-      <div
-        {...getRootProps()}
-        className={`${
-          isDragActive ? 'border-green-600' : 'border-gray-700'
-        } p-10 my-6 text-center border-4 border-dotted rounded-lg cursor-pointer`}
-      >
-        <input {...getInputProps()} />
-        {uploading ? (
-          <p>Uploading...</p>
-        ) : isDragActive ? (
-          <p>Drop here</p>
-        ) : (
-          <p>Drag & drop file here, or click to select</p>
+      {uploadJson ? (
+        <textarea
+          className="rounded-lg bg-black p-4 border-indigo-500 w-full"
+          value={jsonString}
+          onChange={(e) => setJsonString(e.target.value)}
+          rows={4}
+          autoFocus
+        />
+      ) : (
+        <div
+          {...getRootProps()}
+          className={`${
+            isDragActive ? 'border-green-600' : 'border-gray-700'
+          } p-10 mt-6 text-center border-4 border-dotted rounded-lg cursor-pointer`}
+        >
+          <input {...getInputProps()} />
+          {uploading ? (
+            <p>Uploading...</p>
+          ) : isDragActive ? (
+            <p>Drop here</p>
+          ) : (
+            <p>Drag & drop file here, or click to select</p>
+          )}
+        </div>
+      )}
+      <div className="flex items-center justify-between">
+        <button
+          className="text-xs hover:underline py-1 mb-6 mt-2"
+          onClick={() => setUploadJson(!uploadJson)}
+        >
+          {uploadJson ? 'Upload Media' : 'Upload JSON'}
+        </button>
+        {uploadJson && (
+          <button
+            disabled={uploading}
+            className="border rounded-lg disabled:opacity-50 text-xs px-4 py-1 mb-6 mt-2"
+            onClick={() => uploadData()}
+          >
+            {uploading ? 'Uploading...' : 'Upload to IPFS'}
+          </button>
         )}
       </div>
 
@@ -101,7 +143,9 @@ function App() {
               text={ipfsData.hash}
               onCopy={() => toast.success('Hash copied 🎉')}
             >
-              <button><CopyIcon /></button>
+              <button>
+                <CopyIcon />
+              </button>
             </CopyToClipboard>
           </div>
           <div className="flex items-center justify-between mb-10 overflow-hidden truncate">
@@ -116,7 +160,9 @@ function App() {
               text={ipfsData.url}
               onCopy={() => toast.success('URL copied 🎉')}
             >
-              <button><CopyIcon /></button>
+              <button>
+                <CopyIcon />
+              </button>
             </CopyToClipboard>
           </div>
           <div className="flex items-center overflow-hidden">
