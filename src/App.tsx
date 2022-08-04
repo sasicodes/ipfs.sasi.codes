@@ -101,7 +101,7 @@ function App() {
               text={ipfsData.hash}
               onCopy={() => toast.success('Hash copied 🎉')}
             >
-              <CopyIcon />
+              <button><CopyIcon /></button>
             </CopyToClipboard>
           </div>
           <div className="flex items-center justify-between mb-10 overflow-hidden truncate">
@@ -116,7 +116,7 @@ function App() {
               text={ipfsData.url}
               onCopy={() => toast.success('URL copied 🎉')}
             >
-              <CopyIcon />
+              <button><CopyIcon /></button>
             </CopyToClipboard>
           </div>
           <div className="flex items-center overflow-hidden">
